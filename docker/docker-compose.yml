@@ -1,0 +1,8 @@
+version: '3'
+services:
+  mm-ratings-processor:
+    image: mm-ratings-processor:latest
+    build:
+      context: ../
+      dockerfile: docker/Dockerfile
+    network_mode: 'host'
