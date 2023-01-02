@@ -5,17 +5,11 @@
 const AWS = require('aws-sdk')
 const config = require('config')
 
+const ecs = new AWS.ECS()
+
 const MrathonRatingsService = require('./MarathonRatingsService')
 const helper = require('../common/helper')
 const logger = require('../common/logger')
-
-const eventBridge = new AWS.EventBridge({
-  credentials: {
-    accessKeyId: config.get('AWS.ACCESS_KEY_ID'),
-    secretAccessKey: config.get('AWS.SECRET'),
-  },
-  region: config.get('AWS.REGION'),
-});
 
 async function handle(message) {
   switch (message.topic) {
@@ -35,18 +29,29 @@ async function handle(message) {
         }
 
         // update skills for the members of the completed challenge
-        const params = {
-          Entries: [
-            {
-              Source: 'skills-etl-initiate',
-              Detail: '{ "challengeId": "challengeDetails.id" }',
-              Resources: ['resource1', 'resource2'], //update value
-              DetailType: 'myDetailType', //update value
-            },
-          ],
+        var params = {
+          cluster: config.CLUSTER_NAME,
+          taskDefinition: config.TASK_DEFINITION,
+          overrides: {
+            containerOverrides: [
+              {
+                environment: [
+                  {
+                    name: 'CHALLENGE_ID',
+                    value: challengeDetails.id
+                  }
+                ]
+              }
+            ]
+          }
         }
 
-        await eventBridge.putEvents(params).promise();
+        ecs.runTask(params, function (error, data) {
+          if (error) {
+            logger.logFullError(error)
+            throw new Error(error)
+          }
+        });
       }
       break
   }
