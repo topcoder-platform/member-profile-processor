@@ -27,7 +27,7 @@ const informixConnString =
 
 /**
  * Get Informix connection using the configured parameters
- * @return {Object} Informix connection
+ * @return {Promise<Object>} Informix connection
  */
 async function getInformixConnection() {
   return ifxn.openSync(informixConnString)
@@ -56,7 +56,7 @@ async function getRoundId(challengeName) {
 /**
  * Get entries of `long_comp_result` table for the given `round_id`
  * @param {string} roundId round id
- * @returns {array} rows from long_comp_result table 
+ * @returns {Promise<array>} rows from long_comp_result table 
  */
 async function getLCREntries(roundId) {
   const informixSession = await getInformixConnection()

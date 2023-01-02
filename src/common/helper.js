@@ -27,7 +27,7 @@ async function getM2Mtoken() {
 /**
  * Function to get challenge details with provided query
  * @param {Object} queryParams query params for filter
- * @returns {Object} challenge description
+ * @returns {Promise} challenge description
  */
 async function getChallengeDetails(queryParams) {
   const token = await getM2Mtoken()
@@ -49,7 +49,7 @@ async function getChallengeDetails(queryParams) {
 /**
  * Function to fetch all the submissions for a given challenge
  * @param {string} challengeId challengeId
- * @returns {array} submissions 
+ * @returns {Promise<array>} submissions 
  */
 async function getSubmissions(challengeId) {
   const token = await getM2Mtoken()
@@ -99,7 +99,7 @@ async function getFinalSubmissions(submissions) {
 /**
  * Helper function returning prepared superagent instance for using with v5 challenge API.
  * @param {String} token M2M token value
- * @returns {Object} superagent instance configured with Authorization header and API url prefix
+ * @returns {Promise<Object>} superagent instance configured with Authorization header and API url prefix
  */
 function getV5Api(token) {
   return request

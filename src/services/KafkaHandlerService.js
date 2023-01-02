@@ -29,7 +29,7 @@ async function handle(message) {
         }
 
         // update skills for the members of the completed challenge
-        var params = {
+        const params = {
           cluster: config.CLUSTER_NAME,
           taskDefinition: config.TASK_DEFINITION,
           overrides: {
