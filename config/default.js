@@ -48,12 +48,6 @@ module.exports = {
     PASSWORD: process.env.DW_PASSWORD || '1nf0rm1x',
   },
 
-  AWS: {
-    ACCESS_KEY_ID: process.env.AWS_ACCESS_KEY_ID,
-    SECRET: process.env.AWS_SECRET,
-    REGION: process.env.AWS_REGION,
-  },
-
   CLUSTER_NAME: process.env.CLUSTER_NAME,
   TASK_DEFINITION: process.env.TASK_DEFINITION
 }
