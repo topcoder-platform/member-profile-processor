@@ -1,7 +1,7 @@
 version: '3'
 services:
-  mm-ratings-processor:
-    image: mm-ratings-processor:latest
+  member-profile-processor:
+    image: member-profile-processor:latest
     build:
       context: ../
       dockerfile: docker/Dockerfile
