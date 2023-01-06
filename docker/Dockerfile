@@ -36,9 +36,9 @@ ENV LICENSE accept
 RUN rm /usr/bin/python && ln -s /usr/bin/python2.7 /usr/bin/python
 RUN echo "sqlexec 2021/tcp" >> /etc/services
 
-COPY . /mm-ratings-processor
+COPY . /member-profile-processor
 
-WORKDIR /mm-ratings-processor
+WORKDIR /member-profile-processor
 
 RUN rm -rf node_modules && npm install --unsafe-perm
 
