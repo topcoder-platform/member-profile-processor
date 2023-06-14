@@ -5,6 +5,7 @@
 const _ = require('lodash')
 const { async } = require('q')
 const config = require('config')
+const fs = require('fs')
 const util = require('util')
 const exec = util.promisify(require('child_process').exec)
 
@@ -19,6 +20,8 @@ async function calculate(challengeId, challengeName) {
     const roundId = await infxDB.getRoundId(challengeName)
     const lcrEntries = await infxDB.getLCREntries(roundId)
 
+    logger.debug(`round id ${roundId}`)
+
     const submissions = await helper.getSubmissions(challengeId)
     const finalSubmissions = await helper.getFinalSubmissions(submissions)
 
@@ -30,20 +33,36 @@ async function calculate(challengeId, challengeName) {
       }
     })
 
+    
+    // TODO: BLOCK FOR RATING CALCULATION
+    // Execute the `calculate_mm_ratings` script by passing the `round_id`
+
+
+    // TODO: BLOCK FOR RATING TRANSFER FROM OLTP TO DW
+    // Execute the `loadlong` script by passing the `round_id`
+
+
+    // TODO: BLOCK FOR RATING TRANSFER FROM DW TO DYNAMODB
+    // Execute the `loaders` script by passing the `challengeID
+    
     // update loadlong.xml with the roundId
-    await helper.updateLoadLongXML(roundId)
+    // await helper.updateLoadLongXML(roundId)
 
     // execute the rating calculation
-    exec("sh loadlong.sh", (error, stdout, stderr) => {
-      if (error || stderr) {
-        throw error
-      }
-    });
+    // await exec("sh loadlong.sh", (error, stdout, stderr) => {
+    //   if (error || stderr) {
+    //     logger.error(error)
+    //     logger.error(stderr)
+    //     throw error
+    //   }
+    // });
 
     logger.debug('=== marathon ratings calcualtion end ===')
   } catch (error) {
     logger.logFullError(error)
     throw new Error(error)
+  } finally {
+    fs.unlink('loadlong.xml')
   }
 }
 

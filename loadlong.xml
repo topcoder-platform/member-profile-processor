@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<loadDefinition>
+  <sourcedb>jdbc:informix-sqli://host.docker.internal:2020/informixoltp:INFORMIXSERVER=informixoltp_tcp;user=coder;password=Qn8TZxFFD77tzQwc</sourcedb>
+  <targetdb>jdbc:informix-sqli://host.docker.internal:2021/topcoder_dw:INFORMIXSERVER=datawarehouse_tcp;user=coder;password=Qn8TZxFFD77tzQwc</targetdb>
+  <load>
+    <classname>com.topcoder.shared.util.dwload.TCLoadLong</classname>
+    <parameterList>
+      <parameter name="roundid" value="17529"/>
+    </parameterList>
+  </load>
+</loadDefinition>

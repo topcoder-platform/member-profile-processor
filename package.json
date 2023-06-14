@@ -13,7 +13,7 @@
     "bluebird": "^3.7.2",
     "config": "^3.3.8",
     "get-parameter-names": "^0.3.0",
-    "ifxnjs": "^8.0.1",
+    "ifxnjs": "^10.0.5",
     "joi": "^17.7.0",
     "lodash": "^4.17.21",
     "no-kafka": "^3.4.3",
@@ -26,6 +26,6 @@
     "xml2js": "^0.4.23"
   },
   "engines": {
-    "node": "8.x"
+    "node": "10.x"
   }
 }
