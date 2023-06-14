@@ -2,10 +2,7 @@
  * Service to handle kafka messages
  */
 
-const AWS = require('aws-sdk')
 const config = require('config')
-
-const ecs = new AWS.ECS()
 
 const MrathonRatingsService = require('./MarathonRatingsService')
 const helper = require('../common/helper')
@@ -27,31 +24,6 @@ async function handle(message) {
         if (challengeDetails.legacy.subTrack.toLowerCase() === 'develop_marathon_match') {
           await MrathonRatingsService.calculate(challengeDetails.id, challengeDetails.name)
         }
-
-        // update skills for the members of the completed challenge
-        const params = {
-          cluster: config.CLUSTER_NAME,
-          taskDefinition: config.TASK_DEFINITION,
-          overrides: {
-            containerOverrides: [
-              {
-                environment: [
-                  {
-                    name: 'CHALLENGE_ID',
-                    value: challengeDetails.id
-                  }
-                ]
-              }
-            ]
-          }
-        }
-
-        ecs.runTask(params, function (error, data) {
-          if (error) {
-            logger.logFullError(error)
-            throw new Error(error)
-          }
-        });
       }
       break
   }
