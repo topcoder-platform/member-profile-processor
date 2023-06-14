@@ -5,6 +5,13 @@ ARG servername=informix
 USER root
 WORKDIR /home/informix
 
+RUN sed -i '/jessie-updates/d' /etc/apt/sources.list
+RUN sed -i 's/httpredir/archive/' /etc/apt/sources.list
+RUN sed -i 's/security.debian.org/archive.debian.org\/debian-security/' /etc/apt/sources.list
+RUN apt-get -qq update && apt-get -qq install -y --force-yes \
+  wget gcc g++ make xz-utils python2.7 git curl
+
+
 RUN mv /etc/apt/sources.list /etc/apt/sources.list.bak && \
     echo "deb http://ftp.debian.org/debian/ stretch main non-free contrib" >/etc/apt/sources.list && \
     echo "deb http://security.debian.org/ stretch/updates main contrib non-free" >>/etc/apt/sources.list
