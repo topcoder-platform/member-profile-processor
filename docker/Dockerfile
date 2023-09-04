@@ -39,10 +39,10 @@ ENV LICENSE accept
 RUN ln -s /usr/bin/python2.7 /usr/bin/python
 RUN echo "sqlexec 2021/tcp" >> /etc/services
 
-# COPY . /member-profile-processor
+COPY . /member-profile-processor
 
-# WORKDIR /member-profile-processor
+WORKDIR /member-profile-processor
 
-# RUN rm -rf node_modules && npm install --unsafe-perm
+RUN rm -rf node_modules && npm install --unsafe-perm
 
-# ENTRYPOINT [ "node", "app.js" ]
+ENTRYPOINT [ "node", "app.js" ]
