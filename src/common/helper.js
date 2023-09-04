@@ -13,7 +13,7 @@ const logger = require('./logger')
 const m2mAuth = require('tc-core-library-js').auth.m2m
 
 const m2m = m2mAuth(
-  _.pick(config, ['AUTH0_URL', 'AUTH0_AUDIENCE', 'AUTH0_PROXY_SERVER_URL'])
+  _.pick(config, ['AUTH0_URL', 'AUTH0_AUDIENCE', 'TOKEN_CACHE_TIME', 'AUTH0_PROXY_SERVER_URL'])
 )
 
 /**
@@ -95,6 +95,76 @@ async function getFinalSubmissions(submissions) {
   return latestSubmissions
 }
 
+/**
+ * Function to initiate the rating calculation
+ * @param {string} roundId roundId
+ * @returns {Object} response 
+ */
+async function initiateRatingCalculation(roundId) {
+  logger.debug("getting token")
+  const token = await getM2Mtoken()
+  
+  logger.debug(`initiate rating calculation for roundId: ${ roundId }`)
+
+  const data = JSON.stringify({
+    "roundId": roundId
+  });
+
+  const response = await getV5Api(token).post('/ratings/mm/calculate').send(data)
+  const content = _.get(response.body, '[0]')
+
+  if (content) {
+    return content
+  }
+
+  return null  
+}
+
+/**
+ * Function to initiate loadCoders
+ * @param {string} roundId roundId
+ * @returns {Object} response 
+ */
+async function initiateLoadRatings(roundId) {
+  logger.debug("getting token")
+  const token = await getM2Mtoken()
+  
+  logger.debug(`initiate load ratings for roundId: ${ roundId }`)
+
+  const data = JSON.stringify({
+    "roundId": roundId
+  });
+
+  const response = await getV5Api(token).post('/ratings/mm/load').send(data)
+  const content = _.get(response.body, '[0]')
+
+  if (content) {
+    return content
+  }
+
+  return null  
+}
+
+/**
+ * Function to initiate loadCoders
+ * @returns {Object} response 
+ */
+async function initiateLoadCoders() {
+  logger.debug("getting token")
+  const token = await getM2Mtoken()
+  
+  logger.debug('initiate load coders')
+
+  const response = await getV5Api(token).post('/ratings/coders/load').send()
+  const content = _.get(response.body, '[0]')
+
+  if (content) {
+    return content
+  }
+
+  return null  
+}
+
 
 /**
  * Helper function returning prepared superagent instance for using with v5 challenge API.
@@ -162,5 +232,8 @@ module.exports = {
   getSubmissions,
   getFinalSubmissions,
   getKafkaOptions,
+  initiateRatingCalculation,
+  initiateLoadCoders,
+  initiateLoadRatings,
   updateLoadLongXML
 }
