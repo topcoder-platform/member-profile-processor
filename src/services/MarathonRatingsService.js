@@ -18,9 +18,10 @@ async function calculate(challengeId, challengeName) {
     logger.debug('=== marathon ratings calcualtion start ===')
 
     const roundId = await infxDB.getRoundId(challengeName)
-    const lcrEntries = await infxDB.getLCREntries(roundId)
 
     logger.debug(`round id ${roundId}`)
+
+    const lcrEntries = await infxDB.getLCREntries(roundId)
 
     const submissions = await helper.getSubmissions(challengeId)
     const finalSubmissions = await helper.getFinalSubmissions(submissions)
@@ -32,43 +33,51 @@ async function calculate(challengeId, challengeName) {
         await infxDB.updateLCREntry(res[0].round_id, res[0].coder_id)
       }
     })
-
     
-    // TODO: BLOCK FOR RATING CALCULATION
-    // Execute the `calculate_mm_ratings` script by passing the `round_id`
-
-
-    // TODO: BLOCK FOR RATING TRANSFER FROM OLTP TO DW
-    // Execute the `loadlong` script by passing the `round_id`
-
-
-    // TODO: BLOCK FOR RATING TRANSFER FROM DW TO DYNAMODB
-    // Execute the `loaders` script by passing the `challengeID
-    
-    // update loadlong.xml with the roundId
-    // await helper.updateLoadLongXML(roundId)
-
-    // execute the rating calculation
-    // await exec("sh loadlong.sh", (error, stdout, stderr) => {
-    //   if (error || stderr) {
-    //     logger.error(error)
-    //     logger.error(stderr)
-    //     throw error
-    //   }
-    // });
+    // BLOCK FOR RATING CALCULATION
+    logger.debug(`=== initiate rating calculatoin for  round: ${roundId } ===`)
+    const result = await helper.initiateRatingCalculation(roundId)
 
     logger.debug('=== marathon ratings calcualtion end ===')
   } catch (error) {
     logger.logFullError(error)
     throw new Error(error)
   } finally {
-    fs.unlink('loadlong.xml')
+    logger.debug('=== marathon ratings calcualtion end ===')
+  }
+}
+
+async function loadRatings(roundId) {
+  try {
+    logger.debug('=== load ratings :: start ===')
+
+    const result = await helper.initiateLoadRatings(roundId)
+
+    logger.debug('=== load ratings :: end ===')
+  } catch (error) {
+    logger.logFullError(error)
+    throw new Error(error)
+  }
+}
+
+async function loadCoders() {
+  try {
+    logger.debug('=== load coders :: start ===')
+
+    const result = await helper.initiateLoadCoders()
+
+    logger.debug('=== load coders :: end ===')
+  } catch (error) {
+    logger.logFullError(error)
+    throw new Error(error)
   }
 }
 
 // Exports
 module.exports = {
-  calculate
+  calculate,
+  loadCoders,
+  loadRatings
 }
 
 logger.buildService(module.exports)

@@ -26,6 +26,23 @@ async function handle(message) {
         }
       }
       break
+
+    case config.KAFKA_RATING_SERVIE_TOPIC:
+      if (message.originator === 'rating.calculation.service') {
+        if (
+          message.payload.event === 'RATINGS_CALCULATION' &&
+          message.payload.status === 'COMPLETE'
+        ) {
+          await MrathonRatingsService.loadCoders()
+        } else if (
+          message.payload.event === 'LOAD_CODERS' &&
+          message.payload.status === 'COMPLETE'
+        ) {
+          await MrathonRatingsService.loadRatings(message.payload.roundId)
+        }
+      }
+      
+      break
   }
 }
 
