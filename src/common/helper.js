@@ -155,7 +155,11 @@ async function initiateLoadCoders() {
   
   logger.debug('initiate load coders')
 
-  const response = await getV5Api(token).post('/ratings/coders/load').send()
+  const data = JSON.stringify({
+    "roundId": roundId
+  });
+
+  const response = await getV5Api(token).post('/ratings/coders/load').send(data)
   const content = _.get(response.body, '[0]')
 
   if (content) {
