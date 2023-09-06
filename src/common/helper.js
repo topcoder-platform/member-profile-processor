@@ -135,7 +135,7 @@ async function initiateLoadRatings(roundId) {
     "roundId": roundId
   });
 
-  const response = await getV5Api(token).post('/ratings/mm/load').send(data)
+  const response = await getV5Api(token).post('/ratings/mm/load').send(data).set('Content-Type', 'application/json')
   const content = _.get(response.body, '[0]')
 
   if (content) {
@@ -159,7 +159,7 @@ async function initiateLoadCoders(roundId) {
     "roundId": roundId
   });
 
-  const response = await getV5Api(token).post('/ratings/coders/load').send(data)
+  const response = await getV5Api(token).post('/ratings/coders/load').send(data).set('Content-Type', 'application/json')
   const content = _.get(response.body, '[0]')
 
   if (content) {
