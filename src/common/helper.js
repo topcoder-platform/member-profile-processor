@@ -149,7 +149,7 @@ async function initiateLoadRatings(roundId) {
  * Function to initiate loadCoders
  * @returns {Object} response 
  */
-async function initiateLoadCoders() {
+async function initiateLoadCoders(roundId) {
   logger.debug("getting token")
   const token = await getM2Mtoken()
   
