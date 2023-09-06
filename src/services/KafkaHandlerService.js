@@ -33,7 +33,7 @@ async function handle(message) {
           message.payload.event === 'RATINGS_CALCULATION' &&
           message.payload.status === 'COMPLETE'
         ) {
-          await MrathonRatingsService.loadCoders()
+          await MrathonRatingsService.loadCoders(message.payload.roundId)
         } else if (
           message.payload.event === 'LOAD_CODERS' &&
           message.payload.status === 'COMPLETE'

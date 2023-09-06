@@ -60,11 +60,11 @@ async function loadRatings(roundId) {
   }
 }
 
-async function loadCoders() {
+async function loadCoders(roundId) {
   try {
     logger.debug('=== load coders :: start ===')
 
-    const result = await helper.initiateLoadCoders()
+    const result = await helper.initiateLoadCoders(roundId)
 
     logger.debug('=== load coders :: end ===')
   } catch (error) {
