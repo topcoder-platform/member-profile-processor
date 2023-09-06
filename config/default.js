@@ -48,8 +48,5 @@ module.exports = {
     HOST: process.env.DW_HOST || 'localhost',
     PORT: process.env.DW_PORT || '2022',
     PASSWORD: process.env.DW_PASSWORD || '1nf0rm1x',
-  },
-
-  CLUSTER_NAME: process.env.CLUSTER_NAME,
-  TASK_DEFINITION: process.env.TASK_DEFINITION
+  }
 }
