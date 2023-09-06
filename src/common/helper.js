@@ -103,14 +103,14 @@ async function getFinalSubmissions(submissions) {
 async function initiateRatingCalculation(roundId) {
   logger.debug("getting token")
   const token = await getM2Mtoken()
-  
+
   logger.debug(`initiate rating calculation for roundId: ${ roundId }`)
 
   const data = JSON.stringify({
-    "roundId": roundId
+    "roundId": Number(roundId)
   });
 
-  const response = await getV5Api(token).post('/ratings/mm/calculate').send(data)
+  const response = await getV5Api(token).post('/ratings/mm/calculate').send(data).set('Content-Type', 'application/json')
   const content = _.get(response.body, '[0]')
 
   if (content) {
