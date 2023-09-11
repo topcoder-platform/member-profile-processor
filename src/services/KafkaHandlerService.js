@@ -31,12 +31,12 @@ async function handle(message) {
       if (message.originator === 'rating.calculation.service') {
         if (
           message.payload.event === 'RATINGS_CALCULATION' &&
-          message.payload.status === 'COMPLETE'
+          message.payload.status === 'SUCCESS'
         ) {
           await MrathonRatingsService.loadCoders(message.payload.roundId)
         } else if (
           message.payload.event === 'LOAD_CODERS' &&
-          message.payload.status === 'COMPLETE'
+          message.payload.status === 'SUCCESS'
         ) {
           await MrathonRatingsService.loadRatings(message.payload.roundId)
         }
