@@ -19,7 +19,7 @@ module.exports = {
   KAFKA_AUTOPILOT_NOTIFICATIONS_TOPIC:
     process.env.KAFKA_AUTOPILOT_NOTIFICATIONS_TOPIC ||
     'notifications.autopilot.events',
-  KAFKA_RATING_SERVIE_TOPIC: process.env.KAFKA_RATING_SERVIE_TOPIC || 'notificaiton.rating.calculation',
+  KAFKA_RATING_SERVICE_TOPIC: process.env.KAFKA_RATING_SERVICE_TOPIC || 'notification.rating.calculation',
   
 
   // oatuh details
