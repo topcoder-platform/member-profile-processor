@@ -15,9 +15,9 @@ const logger = require('../common/logger')
 
 async function calculate(challengeId, challengeName) {
   try {
-    logger.debug('=== marathon ratings calcualtion start ===')
+    logger.debug('=== Marathon Match ratings calculation start ===')
 
-    const roundId = await infxDB.getRoundId(challengeName)
+    const roundId = await infxDB.getRoundId(challengeId)
 
     logger.debug(`round id ${roundId}`)
 
@@ -38,12 +38,13 @@ async function calculate(challengeId, challengeName) {
     logger.debug(`=== initiate rating calculatoin for  round: ${roundId } ===`)
     const result = await helper.initiateRatingCalculation(roundId)
 
-    logger.debug('=== marathon ratings calcualtion end ===')
+    logger.debug('=== Marathon Match ratings calculation success ===')
   } catch (error) {
+    logger.debug('=== Marathon Match ratings calculation failure ===')
     logger.logFullError(error)
     throw new Error(error)
   } finally {
-    logger.debug('=== marathon ratings calcualtion end ===')
+    logger.debug('=== Marathon Match ratings calculation end ===')
   }
 }
 

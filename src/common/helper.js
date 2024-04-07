@@ -21,18 +21,20 @@ const m2m = m2mAuth(
  * @returns {Promise}
  */
 async function getM2Mtoken() {
+  logger.info("Getting M2M token")
   return m2m.getMachineToken(config.AUTH0_CLIENT_ID, config.AUTH0_CLIENT_SECRET)
 }
 
 /**
  * Function to get challenge details with provided query
+ * from the v5 API endpoint
  * @param {Object} queryParams query params for filter
  * @returns {Promise} challenge description
  */
 async function getChallengeDetails(queryParams) {
   const token = await getM2Mtoken()
   logger.info(
-    `fetching challenge detail using query params: ${JSON.stringify(
+    `Fetching v5 challenge detail using query params: ${JSON.stringify(
       queryParams
     )}`
   )
@@ -53,7 +55,7 @@ async function getChallengeDetails(queryParams) {
  */
 async function getSubmissions(challengeId) {
   const token = await getM2Mtoken()
-  logger.info(`fetching submissions for a given challenge: ${challengeId}`)
+  logger.info(`Fetching v5 submissions for a given challenge: ${challengeId}`)
 
   let allSubmissions = []
   let response = {}
@@ -96,15 +98,16 @@ async function getFinalSubmissions(submissions) {
 }
 
 /**
- * Function to initiate the rating calculation
+ * Function to initiate the rating calculation.  The rating calculation is handled
+ * by the ratings calculation service, so this method just makes an API call to 
+ * that service
  * @param {string} roundId roundId
  * @returns {Object} response 
  */
 async function initiateRatingCalculation(roundId) {
-  logger.debug("getting token")
   const token = await getM2Mtoken()
 
-  logger.debug(`initiate rating calculation for roundId: ${ roundId }`)
+  logger.debug(`Initiating rating calculation for roundId: ${ roundId }`)
 
   const data = JSON.stringify({
     "roundId": Number(roundId)
@@ -121,15 +124,14 @@ async function initiateRatingCalculation(roundId) {
 }
 
 /**
- * Function to initiate loadCoders
+ * Function to initiate loadRatings, via the ratings calculation service
  * @param {string} roundId roundId
  * @returns {Object} response 
  */
 async function initiateLoadRatings(roundId) {
-  logger.debug("getting token")
   const token = await getM2Mtoken()
   
-  logger.debug(`initiate load ratings for roundId: ${ roundId }`)
+  logger.debug(`Initiating load ratings for roundId: ${ roundId }`)
 
   const data = JSON.stringify({
     "roundId": roundId
@@ -146,14 +148,13 @@ async function initiateLoadRatings(roundId) {
 }
 
 /**
- * Function to initiate loadCoders
+ * Function to initiate loadCoders, via the ratings calculation service
  * @returns {Object} response 
  */
 async function initiateLoadCoders(roundId) {
-  logger.debug("getting token")
   const token = await getM2Mtoken()
   
-  logger.debug('initiate load coders')
+  logger.debug(`Initiating load coders FOR ROUNDiD: ${ roundId }`)
 
   const data = JSON.stringify({
     "roundId": roundId
@@ -200,36 +201,6 @@ function getKafkaOptions() {
   return options
 }
 
-/**
- * Function to update `loadlong.xml` file
- * @param {array} roundId
- */
-async function updateLoadLongXML(roundId) {
-  try {
-    const data = fs.readFileSync('loadlongORG.xml', 'utf-8')
-    parseString(data, function (err, result) {
-      if (err) throw new Error(error)
-
-      let updateData = result
-      updateData.loadDefinition.sourcedb[0] = updateData.loadDefinition.sourcedb[0].replace('#{INFORMIXSERVER}', config.get('INFORMIX.HOST') + ':' + config.get('INFORMIX.PORT'))
-      updateData.loadDefinition.sourcedb[0] = updateData.loadDefinition.sourcedb[0].replace('#{INFORMIXPASSWORD}', config.get('INFORMIX.PASSWORD'))
-
-      updateData.loadDefinition.targetdb[0] = updateData.loadDefinition.targetdb[0].replace('#{DWWAREHOUSE}', config.get('DW.HOST') + ':' + config.get('DW.PORT'))
-      updateData.loadDefinition.targetdb[0] = updateData.loadDefinition.targetdb[0].replace('#{DWPASSWORD}', config.get('DW.PASSWORD'))
-
-      updateData.loadDefinition.load[0].parameterList[0].parameter[0]['$'].value = roundId.toString()
-
-      const builder = new xml2js.Builder();
-      const xml = builder.buildObject(updateData);
-
-      fs.writeFileSync('loadlong.xml', xml)
-    })
-  } catch (error) {
-    logger.logFullError(error)
-    throw new Error(error)
-  }
-}
-
 module.exports = {
   getM2Mtoken,
   getChallengeDetails,
@@ -238,6 +209,5 @@ module.exports = {
   getKafkaOptions,
   initiateRatingCalculation,
   initiateLoadCoders,
-  initiateLoadRatings,
-  updateLoadLongXML
+  initiateLoadRatings
 }
