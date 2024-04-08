@@ -1,7 +1,7 @@
 #!/bin/bash
 set -eo pipefail
 UPDATE_CACHE=""
-docker-compose -f docker/docker-compose.yml build member-profile-processor
+docker compose -f docker/docker-compose.yml build member-profile-processor
 docker create --name app member-profile-processor:latest
 
 if [ -d node_modules ]
