@@ -21,7 +21,7 @@ async function handle(message) {
           legacyId: message.payload.projectId
         })
 
-        if (challengeDetails.legacy.subTrack.toLowerCase() === 'develop_marathon_match') {
+        if (challengeDetails.legacy.subTrack.toLowerCase() === 'marathon_match') {
           await MarathonRatingsService.calculate(challengeDetails.id)
         }
       }
