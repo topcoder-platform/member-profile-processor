@@ -70,7 +70,7 @@ function check() {
 consumer
   .init([
     {
-      subscriptions: [config.KAFKA_AUTOPILOT_NOTIFICATIONS_TOPIC, config.KAFKA_RATING_SERVIE_TOPIC],
+      subscriptions: [config.KAFKA_AUTOPILOT_NOTIFICATIONS_TOPIC, config.KAFKA_RATING_SERVICE_TOPIC],
       handler: dataHandler
     }
   ])

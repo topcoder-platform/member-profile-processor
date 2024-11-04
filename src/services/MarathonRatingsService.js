@@ -13,11 +13,11 @@ const helper = require('../common/helper')
 const infxDB = require('../common/informixDB')
 const logger = require('../common/logger')
 
-async function calculate(challengeId, challengeName) {
+async function calculate(challengeId) {
   try {
-    logger.debug('=== marathon ratings calcualtion start ===')
+    logger.debug('=== Marathon Match ratings calculation start ===')
 
-    const roundId = await infxDB.getRoundId(challengeName)
+    const roundId = await infxDB.getRoundId(challengeId)
 
     logger.debug(`round id ${roundId}`)
 
@@ -35,25 +35,26 @@ async function calculate(challengeId, challengeName) {
     })
     
     // BLOCK FOR RATING CALCULATION
-    logger.debug(`=== initiate rating calculatoin for  round: ${roundId } ===`)
+    logger.debug(`=== Initiating rating calculation for round: ${roundId } ===`)
     const result = await helper.initiateRatingCalculation(roundId)
 
-    logger.debug('=== marathon ratings calcualtion end ===')
+    logger.debug('=== Marathon Match ratings calculation success ===')
   } catch (error) {
+    logger.debug('=== Marathon Match ratings calculation failure ===')
     logger.logFullError(error)
     throw new Error(error)
   } finally {
-    logger.debug('=== marathon ratings calcualtion end ===')
+    logger.debug('=== Marathon Match ratings calculation end ===')
   }
 }
 
 async function loadRatings(roundId) {
   try {
-    logger.debug('=== load ratings :: start ===')
+    logger.debug('=== Load Ratings start ===')
 
     const result = await helper.initiateLoadRatings(roundId)
 
-    logger.debug('=== load ratings :: end ===')
+    logger.debug('=== Load Ratings end ===')
   } catch (error) {
     logger.logFullError(error)
     throw new Error(error)
@@ -62,11 +63,11 @@ async function loadRatings(roundId) {
 
 async function loadCoders(roundId) {
   try {
-    logger.debug('=== load coders :: start ===')
+    logger.debug('=== Load Coders start ===')
 
     const result = await helper.initiateLoadCoders(roundId)
 
-    logger.debug('=== load coders :: end ===')
+    logger.debug('=== Load Coders end ===')
   } catch (error) {
     logger.logFullError(error)
     throw new Error(error)

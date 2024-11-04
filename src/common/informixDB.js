@@ -34,14 +34,20 @@ async function getInformixConnection() {
 }
 
 /**
- * Get `round_id` for the given challenge
- * @param {string} challengeName challenge name
+ * Get `round_id` for the given challenge ID
+ * @param {string} challengeId challenge id
  * @returns {array} rows from round table 
  */
-async function getRoundId(challengeName) {
+async function getRoundId(challengeId) {
   const informixSession = await getInformixConnection()
   try {
-    const res = informixSession.querySync('select * from round r, contest c where c.name = ? and c.contest_id = r.contest_id', [challengeName]);
+    const res = informixSession.querySync('select * from round r, contest c, tcs_catalog:informix.project_info p \
+                                            where \
+                                            c.contest_id = r.contest_id \
+                                            and p.project_info_type_id = 56 \
+                                            and r.round_id = p.value \
+                                            and p.project_id=? \
+                                          ', [challengeId]);
 
     return res[0].round_id
   } catch (error) {
