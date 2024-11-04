@@ -26,6 +26,7 @@ async function calculate(challengeId, legacyId) {
     const submissions = await helper.getSubmissions(challengeId)
     const finalSubmissions = await helper.getFinalSubmissions(submissions)
 
+    logger.debug(`Final submissions: ${JSON.stringify(finalSubmissions)}`)
     finalSubmissions.forEach(async submission => {
       const res = _.filter(lcrEntries, { coder_id: submission.memberId.toString() })
       if (res && res[0].attended == 'N') {
