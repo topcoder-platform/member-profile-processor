@@ -29,7 +29,7 @@ async function calculate(challengeId, legacyId) {
     logger.debug(`Final submissions: ${JSON.stringify(finalSubmissions)}`)
     finalSubmissions.forEach(async submission => {
       const res = _.filter(lcrEntries, { coder_id: submission.memberId.toString() })
-      if (res && res[0].attended == 'N') {
+      if (res && res[0] && res[0].attended && res[0].attended == 'N') {
         // validate the final score and the attended flag
         await infxDB.updateLCREntry(res[0].round_id, res[0].coder_id)
       }
