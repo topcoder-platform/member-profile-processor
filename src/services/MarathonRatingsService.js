@@ -13,11 +13,11 @@ const helper = require('../common/helper')
 const infxDB = require('../common/informixDB')
 const logger = require('../common/logger')
 
-async function calculate(challengeId) {
+async function calculate(challengeId, legacyId) {
   try {
     logger.debug('=== Marathon Match ratings calculation start ===')
 
-    const roundId = await infxDB.getRoundId(challengeId)
+    const roundId = await infxDB.getRoundId(legacyId)
 
     logger.debug(`round id ${roundId}`)
 

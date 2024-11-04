@@ -22,7 +22,7 @@ async function handle(message) {
         })
 
         if (challengeDetails.legacy.subTrack.toLowerCase() === 'marathon_match') {
-          await MarathonRatingsService.calculate(challengeDetails.legacyId)
+          await MarathonRatingsService.calculate(challengeDetails.id, challengeDetails.legacyId)
         }
       }
       break
