@@ -41,13 +41,14 @@ async function getInformixConnection() {
 async function getRoundId(challengeId) {
   const informixSession = await getInformixConnection()
   try {
+    logger.info("Getting round information for project / challenge ID: " + challengeId)
     const res = informixSession.querySync('select * from round r, contest c, tcs_catalog:informix.project_info p \
                                             where \
                                             c.contest_id = r.contest_id \
                                             and p.project_info_type_id = 56 \
                                             and r.round_id = p.value \
                                             and p.project_id=? \
-                                          ', [challengeId]);
+                                          ', [Number(challengeId)]);
 
     return res[0].round_id
   } catch (error) {
